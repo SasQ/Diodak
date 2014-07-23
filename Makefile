@@ -11,6 +11,7 @@ DIR_SRC=./src
 DIR_LIB=./lib
 DIR_OBJ=./obj
 DIR_BLD=./build
+DIR_RES=$(DIR_SRC)/assets
 
 # ----- Pretty output -----
 
@@ -39,7 +40,7 @@ $(DIR_BLD)/diodak: $(DIR_OBJ)/main.o
 	@$(LD) $(DIR_OBJ)/main.o -o $(DIR_BLD)/diodak $(LDOPTS)
 	@echo -e "\n$(COLR_GRN)*** SUCCESSFULLY BUILT ***$(COLR_RST)\n"
 
-$(DIR_OBJ)/main.o: $(DIR_SRC)/main.cc
+$(DIR_OBJ)/main.o: $(DIR_SRC)/main.cc  $(DIR_RES)/icons/NewCircuit.xpm
 	$(QUIET_CC) $(DIR_SRC)/main.cc\n"
 	@mkdir -p $(DIR_OBJ)
 	@$(CC) -c $(DIR_SRC)/main.cc -o $(DIR_OBJ)/main.o $(CCOPTS)

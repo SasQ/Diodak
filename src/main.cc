@@ -6,6 +6,12 @@
 #include <wx/frame.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/icon.h>
+#include <wx/toolbar.h>
+#include <wx/combobox.h>
+
+// Icons (in XPM format).
+#include "assets/icons/NewCircuit.xpm"
 
 
 /// Application class.
@@ -51,26 +57,55 @@ BEGIN_EVENT_TABLE(DiodakFrame, wxFrame)
 	EVT_MENU(wxID_ABOUT, DiodakFrame::OnCmdAbout)
 END_EVENT_TABLE()
 
+
 /// The main frame's default constructor.
 DiodakFrame::DiodakFrame(): wxFrame(0, wxID_ANY, wxT("Diodak 0.1") )
 {
+	// Set the main window's icon.
+	SetIcon( wxIcon(NewCircuit_xpm) );
+	
 	// Create some basic menus with menu items.
 	// Since we use the default system menus, we don't need to specify any additional params.
+	
+	// "File" menu.
+	wxMenu *menuFile = new wxMenu;
+	menuFile->Append(wxID_NEW);
+	menuFile->Append(wxID_OPEN);
+	menuFile->AppendSeparator();
+	menuFile->Append(wxID_EXIT);
+	
+	// "Edit" menu.
+	wxMenu *menuEdit = new wxMenu;
+	menuEdit->Append(wxID_UNDO);
+	menuEdit->Append(wxID_REDO);
+	menuEdit->AppendSeparator();
+	menuEdit->Append(wxID_CUT);
+	menuEdit->Append(wxID_COPY);
+	menuEdit->Append(wxID_PASTE);
 	
 	// "Help" menu.
 	wxMenu *menuHelp = new wxMenu;
 	menuHelp->Append(wxID_ABOUT);
 	
-	// "File" menu.
-	wxMenu *menuFile = new wxMenu;
-	menuFile->AppendSeparator();
-	menuFile->Append(wxID_EXIT);
-	
-	// Create the menu bar and attach the menus to it.
+	// Create a menu bar and attach the menus to it.
 	wxMenuBar *menuBar = new wxMenuBar;
 	menuBar->Append(menuFile, wxT("&File") );
+	menuBar->Append(menuEdit, wxT("&Edit") );
 	menuBar->Append(menuHelp, wxT("&Help") );
 	SetMenuBar(menuBar);
+	
+	// Create a toolbar and add some tool icons to it.
+	wxToolBar* toolBar = CreateToolBar();
+	toolBar->AddTool(wxID_NEW,  wxT("New"),  wxIcon(NewCircuit_xpm), wxT("New circuit")  );
+	toolBar->AddTool(wxID_OPEN, wxT("Open"), wxIcon(NewCircuit_xpm), wxT("Open circuit") );
+	toolBar->AddSeparator();
+	
+	// Add a combo box (because we can!).
+	wxComboBox *combo = new wxComboBox(toolBar,wxID_ANY);
+	toolBar->AddControl(combo);
+	
+	toolBar->Realize();
+	SetToolBar(toolBar);
 	
 	// Create the status bar.
 	CreateStatusBar();

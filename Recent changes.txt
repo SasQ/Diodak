@@ -1,1 +1,4 @@
-*	Basic event handling to handle menu commands.
+*	Added an example toolbar with two icons and a combo box.
+*	The icon has been reused for the main window's icon (for now).
+*	Icons are handled as XPM files, and they are stored in the `src/assets/icons` directory.
+*	`Makefile` updated to account for the icon asset's changes.
