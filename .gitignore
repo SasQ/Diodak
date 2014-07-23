@@ -1,0 +1,10 @@
+# Editor's temporary files.
+*~
+*.*~
+*.tmp
+
+# Build process temporary files.
+obj/
+
+# Built binary executables.
+bin/
