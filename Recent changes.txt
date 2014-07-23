@@ -1,1 +1,2 @@
-Initial commit.
+* Minimal wxWidgets application.
+* Added simple `Makefile` to facilitate compiling and linking against wxWidgets library.
