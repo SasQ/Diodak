@@ -1,1 +1,1 @@
-* Creating the application's main window (frame) and showing it on the desktop.
+* Simple menu bar and a status bar.

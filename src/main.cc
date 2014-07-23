@@ -4,12 +4,10 @@
 // wxWidgets library headers.
 #include <wx/app.h>
 #include <wx/frame.h>
+#include <wx/menu.h>
 
 
-/** Application class.
- ** We derive our application after the `wxApp` class from wxWidgets library and personalize it.
- ** For now we just override its `OnInit` method which is to be called when the application starts.
- **/
+/// Application class.
 class DiodakApp: public wxApp
 {
  public:
@@ -17,14 +15,11 @@ class DiodakApp: public wxApp
 };
 
 
-/** Main window (frame) class.
- ** We derive it after `wxFrame` class from wxWidgets library
- ** and personalize it through base class's constructor call.
- **/
+/// Main window (frame) class.
 class DiodakFrame: public wxFrame
 {
  public:
- 	DiodakFrame(): wxFrame(0, wxID_ANY, wxT("Diodak 0.1") ) {}
+ 	DiodakFrame();
 };
 
 
@@ -39,10 +34,33 @@ IMPLEMENT_APP(DiodakApp)
 bool DiodakApp::OnInit()
 {
 	std::clog << "Diodak v0.1 (2014.07.19) by Mike 'SasQ' Studencki <sasq1@go2.pl>" << std::endl;
+	(new DiodakFrame)->Show(true);  // Create the main window and show it on the desktop.
+	return true;                    // Successfully initialized. Continue running the app.
+}
+
+
+/// The main frame's default constructor.
+DiodakFrame::DiodakFrame(): wxFrame(0, wxID_ANY, wxT("Diodak 0.1") )
+{
+	// Create some basic menus with menu items.
+	// Since we use the default system menus, we don't need to specify any additional params.
 	
-	// Create the main window and show it on the desktop.
-	// We don't need to store the new object; we can use the temporary as well.
-	(new DiodakFrame)->Show(true);
+	// "Help" menu.
+	wxMenu *menuHelp = new wxMenu;
+	menuHelp->Append(wxID_ABOUT);
 	
-	return true;  // Successfully initialized. Continue running the app.
+	// "File" menu.
+	wxMenu *menuFile = new wxMenu;
+	menuFile->AppendSeparator();
+	menuFile->Append(wxID_EXIT);
+	
+	// Create the menu bar and attach the menus to it.
+	wxMenuBar *menuBar = new wxMenuBar;
+	menuBar->Append(menuFile, wxT("&File") );
+	menuBar->Append(menuHelp, wxT("&Help") );
+	SetMenuBar(menuBar);
+	
+	// Create the status bar.
+	CreateStatusBar();
+	SetStatusText( wxT("Command, my Master!") );
 }
