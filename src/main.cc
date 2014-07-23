@@ -5,6 +5,7 @@
 #include <wx/app.h>
 #include <wx/frame.h>
 #include <wx/menu.h>
+#include <wx/msgdlg.h>
 
 
 /// Application class.
@@ -20,6 +21,11 @@ class DiodakFrame: public wxFrame
 {
  public:
  	DiodakFrame();
+ 	void OnCmdAbout(wxCommandEvent& evt);
+ 	void OnCmdExit(wxCommandEvent& evt);
+ 	
+ private:
+ 	DECLARE_EVENT_TABLE()
 };
 
 
@@ -38,6 +44,12 @@ bool DiodakApp::OnInit()
 	return true;                    // Successfully initialized. Continue running the app.
 }
 
+
+// Main window's static event table.
+BEGIN_EVENT_TABLE(DiodakFrame, wxFrame)
+	EVT_MENU(wxID_EXIT,  DiodakFrame::OnCmdExit)
+	EVT_MENU(wxID_ABOUT, DiodakFrame::OnCmdAbout)
+END_EVENT_TABLE()
 
 /// The main frame's default constructor.
 DiodakFrame::DiodakFrame(): wxFrame(0, wxID_ANY, wxT("Diodak 0.1") )
@@ -63,4 +75,22 @@ DiodakFrame::DiodakFrame(): wxFrame(0, wxID_ANY, wxT("Diodak 0.1") )
 	// Create the status bar.
 	CreateStatusBar();
 	SetStatusText( wxT("Command, my Master!") );
+}
+
+/// ----- Menu commands handlers -----
+
+/// Handle File -> Exit.
+void DiodakFrame::OnCmdExit(wxCommandEvent& evt)
+{
+	// We don't store any user data yet,
+	// so we just quit without asking by closing the main window.
+	Close(true);
+}
+
+/// Handle Help -> About.
+void DiodakFrame::OnCmdAbout(wxCommandEvent& evt)
+{
+	// Display a simple message box with some information about the program and its author.
+	wxMessageBox( wxT("Diodak v0.1 (build 2014.07.19) by Mike 'SasQ' Studencki <sasq1@go2.pl>"),
+		wxT("About Diodak"), wxOK | wxICON_INFORMATION );
 }

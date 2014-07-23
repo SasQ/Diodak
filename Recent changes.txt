@@ -1,1 +1,1 @@
-* Simple menu bar and a status bar.
+*	Basic event handling to handle menu commands.
