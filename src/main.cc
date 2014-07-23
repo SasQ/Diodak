@@ -1,5 +1,6 @@
 // C++ Standard Library headers.
 #include <iostream>
+#include <string>
 
 // wxWidgets library headers.
 #include <wx/app.h>
@@ -9,9 +10,21 @@
 #include <wx/icon.h>
 #include <wx/toolbar.h>
 #include <wx/combobox.h>
+#include <wx/string.h>
 
 // Icons (in XPM format).
 #include "assets/icons/NewCircuit.xpm"
+
+// Strings.
+const std::string
+	appName         = "Diodak",
+	appVersion      = "0.1",
+	appBuildDate    = "2014.07.19",
+	appAuthor       = "Mike 'SasQ' Studencki",
+	appAuthorEmail  = "sasq1@go2.pl",
+	appNameVer      = appName + ' ' + appVersion,
+	appNameVerBuild = appNameVer + " (build " + appBuildDate + ")",
+	appAuthorFull   = appAuthor + " <" + appAuthorEmail + ">";
 
 
 /// Application class.
@@ -31,6 +44,9 @@ class DiodakFrame: public wxFrame
  	void OnCmdExit(wxCommandEvent& evt);
  	
  private:
+ 	void InitMenus();
+ 	void InitToolbars();
+ 	
  	DECLARE_EVENT_TABLE()
 };
 
@@ -45,7 +61,8 @@ IMPLEMENT_APP(DiodakApp)
 /// Handle the application's initialization.
 bool DiodakApp::OnInit()
 {
-	std::clog << "Diodak v0.1 (2014.07.19) by Mike 'SasQ' Studencki <sasq1@go2.pl>" << std::endl;
+	std::clog << appNameVerBuild + " by " + appAuthorFull << std::endl;
+	
 	(new DiodakFrame)->Show(true);  // Create the main window and show it on the desktop.
 	return true;                    // Successfully initialized. Continue running the app.
 }
@@ -59,11 +76,22 @@ END_EVENT_TABLE()
 
 
 /// The main frame's default constructor.
-DiodakFrame::DiodakFrame(): wxFrame(0, wxID_ANY, wxT("Diodak 0.1") )
+DiodakFrame::DiodakFrame():
+	wxFrame(0, wxID_ANY, wxString::FromAscii( appNameVer.c_str() ) )
 {
 	// Set the main window's icon.
 	SetIcon( wxIcon(NewCircuit_xpm) );
 	
+	// Create the main menu bars & toolbars.
+	InitMenus();  InitToolbars();
+	
+	// All's ready to roll. Create the status bar.
+	CreateStatusBar();  SetStatusText( wxT("Command, my Master!") );
+}
+
+/// Initialize the menus with menu items.
+void DiodakFrame::InitMenus()
+{
 	// Create some basic menus with menu items.
 	// Since we use the default system menus, we don't need to specify any additional params.
 	
@@ -93,9 +121,15 @@ DiodakFrame::DiodakFrame(): wxFrame(0, wxID_ANY, wxT("Diodak 0.1") )
 	menuBar->Append(menuEdit, wxT("&Edit") );
 	menuBar->Append(menuHelp, wxT("&Help") );
 	SetMenuBar(menuBar);
+}
+
+/// Initialize the toolbars.
+void DiodakFrame::InitToolbars()
+{
+	// Create a toolbar.
+	wxToolBar *toolBar = CreateToolBar();
 	
-	// Create a toolbar and add some tool icons to it.
-	wxToolBar* toolBar = CreateToolBar();
+	// Add some tool icons into it.
 	toolBar->AddTool(wxID_NEW,  wxT("New"),  wxIcon(NewCircuit_xpm), wxT("New circuit")  );
 	toolBar->AddTool(wxID_OPEN, wxT("Open"), wxIcon(NewCircuit_xpm), wxT("Open circuit") );
 	toolBar->AddSeparator();
@@ -104,12 +138,9 @@ DiodakFrame::DiodakFrame(): wxFrame(0, wxID_ANY, wxT("Diodak 0.1") )
 	wxComboBox *combo = new wxComboBox(toolBar,wxID_ANY);
 	toolBar->AddControl(combo);
 	
+	// Update the toolbar and attach it to the window.
 	toolBar->Realize();
 	SetToolBar(toolBar);
-	
-	// Create the status bar.
-	CreateStatusBar();
-	SetStatusText( wxT("Command, my Master!") );
 }
 
 /// ----- Menu commands handlers -----
@@ -126,6 +157,8 @@ void DiodakFrame::OnCmdExit(wxCommandEvent& evt)
 void DiodakFrame::OnCmdAbout(wxCommandEvent& evt)
 {
 	// Display a simple message box with some information about the program and its author.
-	wxMessageBox( wxT("Diodak v0.1 (build 2014.07.19) by Mike 'SasQ' Studencki <sasq1@go2.pl>"),
-		wxT("About Diodak"), wxOK | wxICON_INFORMATION );
+	wxMessageBox(
+		wxString::FromAscii( (appNameVerBuild + "\nby " + appAuthorFull).c_str() ),
+		wxT("About Diodak"), wxOK | wxICON_INFORMATION
+	);
 }

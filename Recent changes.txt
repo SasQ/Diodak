@@ -1,4 +1,3 @@
-*	Added an example toolbar with two icons and a combo box.
-*	The icon has been reused for the main window's icon (for now).
-*	Icons are handled as XPM files, and they are stored in the `src/assets/icons` directory.
-*	`Makefile` updated to account for the icon asset's changes.
+*	A slight refactor to make the code cleaner and better-organized.
+*	Some strings were repeating, so they've been factored out.
+*	Initialization of menus and toolbars has been factored out into separate functions.
