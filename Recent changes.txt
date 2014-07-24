@@ -1,3 +1,5 @@
-*	A slight refactor to make the code cleaner and better-organized.
-*	Some strings were repeating, so they've been factored out.
-*	Initialization of menus and toolbars has been factored out into separate functions.
+*	Simplest scrollable window using `wxScrolledWindow` (an alias for `wxScrolled<wxPanel>`).
+*	We set its scrollbars by Method 2: setting the virtual size and then the scroll rate directly.
+*	Note how the window's initial size and position from the constructor are being ignored, and the
+	scrolled window is automatically stretched to always fit the whole client area of the frame.
+	This is the default behavior if there's only one child window in the frame.

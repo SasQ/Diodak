@@ -6,10 +6,12 @@
 #include <wx/app.h>
 #include <wx/frame.h>
 #include <wx/menu.h>
-#include <wx/msgdlg.h>
 #include <wx/icon.h>
 #include <wx/toolbar.h>
 #include <wx/combobox.h>
+#include <wx/scrolwin.h>
+#include <wx/colour.h>
+#include <wx/msgdlg.h>
 #include <wx/string.h>
 
 // Icons (in XPM format).
@@ -82,8 +84,16 @@ DiodakFrame::DiodakFrame():
 	// Set the main window's icon.
 	SetIcon( wxIcon(NewCircuit_xpm) );
 	
-	// Create the main menu bars & toolbars.
+	// Initialize menu bars and toolbars.
 	InitMenus();  InitToolbars();
+	
+	// Create a scrolled window for the circuit area, with a white background.
+	wxScrolledWindow *circuitView = new wxScrolledWindow(this, wxID_ANY, wxPoint(150,0), wxSize(200,200), wxHSCROLL|wxVSCROLL);
+	circuitView->SetBackgroundColour(*wxWHITE);
+	
+	// Set the scrolling parameters.
+	circuitView->SetVirtualSize(400,400);  // The size of its "virtual" (potential, offscreen) area.
+	circuitView->SetScrollRate(10,0);      // Jump by 10 pixels as the "scroll unit" (must be positive to see the scrollbars).
 	
 	// All's ready to roll. Create the status bar.
 	CreateStatusBar();  SetStatusText( wxT("Command, my Master!") );
