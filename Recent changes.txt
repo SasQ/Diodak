@@ -1,5 +1,3 @@
-*	Simplest scrollable window using `wxScrolledWindow` (an alias for `wxScrolled<wxPanel>`).
-*	We set its scrollbars by Method 2: setting the virtual size and then the scroll rate directly.
-*	Note how the window's initial size and position from the constructor are being ignored, and the
-	scrolled window is automatically stretched to always fit the whole client area of the frame.
-	This is the default behavior if there's only one child window in the frame.
+*	Our next goal will be to set up drawing a grid as the window's background.
+*	Our first idea is to use the `wxCustomBackgroundWindow` class to tile a bitmap of a grid all over the window's background.
+	We'll write the grid drawing code in the next iteration. This time we just use some random bitmap, as a proof of concept.
