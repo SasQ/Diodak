@@ -92,8 +92,10 @@ DiodakFrame::DiodakFrame():
 	circuitView->SetBackgroundColour(*wxWHITE);
 	
 	// Set the scrolling parameters.
-	circuitView->SetVirtualSize(400,400);  // The size of its "virtual" (potential, offscreen) area.
-	circuitView->SetScrollRate(10,0);      // Jump by 10 pixels as the "scroll unit" (must be positive to see the scrollbars).
+	// We set 10 pixels as the scroll unit (that is, distance between the grid lines),
+	// the virtual area will be 40x40 units (that is, 400x400 pixels),
+	// and we set the initial scroll position to 5 units (50 pixels).
+	circuitView->SetScrollbars(10,10, 40,40, 5,5);
 	
 	// All's ready to roll. Create the status bar.
 	CreateStatusBar();  SetStatusText( wxT("Command, my Master!") );

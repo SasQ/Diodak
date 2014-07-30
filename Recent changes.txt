@@ -1,5 +1,4 @@
 *	Simplest scrollable window using `wxScrolledWindow` (an alias for `wxScrolled<wxPanel>`).
-*	We set its scrollbars by Method 2: setting the virtual size and then the scroll rate directly.
-*	Note how the window's initial size and position from the constructor are being ignored, and the
-	scrolled window is automatically stretched to always fit the whole client area of the frame.
-	This is the default behavior if there's only one child window in the frame.
+*	This time we set its scrollbars by Method 1: setting the scroll range indirectly by using scroll units.
+	One scroll unit will be 10 pixels, which will later correspond to the distance between grid lines.
+*	We also set the initial scroll position (in units).
