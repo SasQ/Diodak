@@ -14,6 +14,9 @@
 //#include <wx/wx.h>
 #include <wx/custombgwin.h>
 #include <wx/bitmap.h>
+#include <wx/dcmemory.h>
+#include <wx/brush.h>
+#include <wx/pen.h>
 #include <wx/colour.h>
 #include <wx/msgdlg.h>
 #include <wx/string.h>
@@ -94,10 +97,25 @@ DiodakFrame::DiodakFrame():
 	InitMenus();  InitToolbars();
 	
 	// Create a scrolled window for the circuit area, with a custom bitmap as its background.
-	//wxScrolledWindow *circuitView = new wxScrolledWindow(this, wxID_ANY, wxPoint(150,0), wxSize(200,200), wxHSCROLL|wxVSCROLL);
 	CircuitView *circuitView = new CircuitView;
 	circuitView->Create(this, wxID_ANY, wxDefaultPosition, wxSize(400,400), wxHSCROLL|wxVSCROLL);
-	circuitView->SetBackgroundBitmap( wxBitmap(64,64) );
+	
+	// --- Prepare the bitmap tile with a grid and set it as the custom background. ---
+	wxBitmap bmpGrid(100,100);
+	wxMemoryDC dcGrid(bmpGrid);
+	
+	// Fill the background with white.
+	dcGrid.SetPen(wxNullPen);
+	dcGrid.SetBrush(*wxWHITE_BRUSH);
+	dcGrid.DrawRectangle(0, 0, bmpGrid.GetWidth(), bmpGrid.GetHeight() );
+	
+	// Draw grid lines.
+	dcGrid.SetPen( wxPen( wxColour(251,251,251), 1) );
+	for (int x=0; x < 100; x += 10) dcGrid.DrawLine(x,0,x,100);
+	for (int y=0; y < 100; y += 10) dcGrid.DrawLine(0,y,100,y);
+	
+	// Set the bitmap as the window's background.
+	circuitView->SetBackgroundBitmap(bmpGrid);
 	
 	// Set the scrolling parameters.
 	circuitView->SetVirtualSize(400,400);  // The size of its "virtual" (potential, offscreen) area.
