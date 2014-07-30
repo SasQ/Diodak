@@ -101,18 +101,33 @@ DiodakFrame::DiodakFrame():
 	circuitView->Create(this, wxID_ANY, wxDefaultPosition, wxSize(400,400), wxHSCROLL|wxVSCROLL);
 	
 	// --- Prepare the bitmap tile with a grid and set it as the custom background. ---
-	wxBitmap bmpGrid(100,100);
+	
+	// Prepare the grid parameters.
+	wxColour grid0Color(251,251,251), grid1Color(247,247,247), grid2Color(242,242,242); // Grid colors: FB, F7, F2.
+	unsigned grid0StepX = 10, grid0StepY = grid0StepX;                                  // Grid 0 resolution is 10 pixels.
+	unsigned grid1StepX = 10*grid0StepX, grid1StepY = 10*grid0StepY,                    // Grid 1 is 10 times more sparse.
+	         grid2StepX = 10*grid1StepX, grid2StepY = 10*grid1StepY;                    // Grid 3 is 10 times more still sparse.
+	unsigned gridSizeX = grid2StepX, gridSizeY = grid2StepY;                            // The size of one repetition of the grid.
+	
+	// Create a bitmap for the grid tile, and its corresponding DC.
+	wxBitmap bmpGrid(gridSizeX,gridSizeY);
 	wxMemoryDC dcGrid(bmpGrid);
 	
 	// Fill the background with white.
 	dcGrid.SetPen(wxNullPen);
 	dcGrid.SetBrush(*wxWHITE_BRUSH);
-	dcGrid.DrawRectangle(0, 0, bmpGrid.GetWidth(), bmpGrid.GetHeight() );
+	dcGrid.DrawRectangle(0,0, gridSizeX,gridSizeY);
 	
 	// Draw grid lines.
-	dcGrid.SetPen( wxPen( wxColour(251,251,251), 1) );
-	for (int x=0; x < 100; x += 10) dcGrid.DrawLine(x,0,x,100);
-	for (int y=0; y < 100; y += 10) dcGrid.DrawLine(0,y,100,y);
+	dcGrid.SetPen( wxPen(grid0Color,1) );
+	for (int x=0; x < gridSizeX; x += grid0StepX) dcGrid.DrawLine(x,0, x,gridSizeY);
+	for (int y=0; y < gridSizeY; y += grid0StepY) dcGrid.DrawLine(0,y, gridSizeX,y);
+	dcGrid.SetPen( wxPen(grid1Color,1) );
+	for (int x=0; x < gridSizeX; x += grid1StepX) dcGrid.DrawLine(x,0, x,gridSizeY);
+	for (int y=0; y < gridSizeY; y += grid1StepY) dcGrid.DrawLine(0,y, gridSizeX,y);
+	dcGrid.SetPen( wxPen(grid2Color,1) );
+	for (int x=0; x < gridSizeX; x += grid2StepX) dcGrid.DrawLine(x,0, x,gridSizeY);
+	for (int y=0; y < gridSizeY; y += grid2StepY) dcGrid.DrawLine(0,y, gridSizeX,y);
 	
 	// Set the bitmap as the window's background.
 	circuitView->SetBackgroundBitmap(bmpGrid);
