@@ -1,8 +1,9 @@
 *	Drawing a grid as the window's background.
-*	Our first idea is to use the `wxCustomBackgroundWindow` class to tile a bitmap of a grid all over the window's background.
-*	Better grid drawing code which draws a nicer grid with three different scales.
-	The code is parametrized, which allows for more flexibility and the code can now be factored out more easily.
-	We'll do that factoring later.
+*	Our first idea was to use the `wxCustomBackgroundWindow` class to tile a bitmap of a grid all over the window's background.
+	But it turned out that it doesn't work well with the `wxScrolledWindow`, so we will drop it soon.
+*	The grid drawing code has been factored out to a separate low-level drawing function which draws a single grid.
+	The function is called three times with different parameters to draw the complex grid.
+	We will continue refactoring it later.
 
 PROBLEMS:
 *	The grid is painted incorrectly in the damaged regions, because it doesn't seem to account for the scrolled position.
@@ -12,5 +13,5 @@ PROBLEMS:
 	This means that we can as well switch to that method instead.
 
 TODO:
-*	Factor out the grid drawing code.
+*	Factor out the grid drawing code some more.
 *	Switch to hand-drawing the background.

@@ -86,6 +86,18 @@ BEGIN_EVENT_TABLE(DiodakFrame, wxFrame)
 END_EVENT_TABLE()
 
 
+// Low-level grid drawing function.
+void DrawGrid(wxDC& canvas, wxColour color, wxSize gridCellSize, wxSize gridSize)
+{
+	unsigned gridStepX = gridCellSize.GetWidth(), gridStepY = gridCellSize.GetHeight(),
+	         gridSizeX = gridSize.GetWidth(), gridSizeY = gridSize.GetHeight();
+	
+	canvas.SetPen( wxPen(color,1) );
+	for (int x=0; x < gridSizeX; x += gridStepX) canvas.DrawLine(x,0, x,gridSizeY);
+	for (int y=0; y < gridSizeY; y += gridStepY) canvas.DrawLine(0,y, gridSizeX,y);
+}
+
+
 /// The main frame's default constructor.
 DiodakFrame::DiodakFrame():
 	wxFrame(0, wxID_ANY, wxString::FromAscii( appNameVer.c_str() ) )
@@ -118,19 +130,12 @@ DiodakFrame::DiodakFrame():
 	dcGrid.SetBrush(*wxWHITE_BRUSH);
 	dcGrid.DrawRectangle(0,0, gridSizeX,gridSizeY);
 	
-	// Draw grid lines.
-	dcGrid.SetPen( wxPen(grid0Color,1) );
-	for (int x=0; x < gridSizeX; x += grid0StepX) dcGrid.DrawLine(x,0, x,gridSizeY);
-	for (int y=0; y < gridSizeY; y += grid0StepY) dcGrid.DrawLine(0,y, gridSizeX,y);
-	dcGrid.SetPen( wxPen(grid1Color,1) );
-	for (int x=0; x < gridSizeX; x += grid1StepX) dcGrid.DrawLine(x,0, x,gridSizeY);
-	for (int y=0; y < gridSizeY; y += grid1StepY) dcGrid.DrawLine(0,y, gridSizeX,y);
-	dcGrid.SetPen( wxPen(grid2Color,1) );
-	for (int x=0; x < gridSizeX; x += grid2StepX) dcGrid.DrawLine(x,0, x,gridSizeY);
-	for (int y=0; y < gridSizeY; y += grid2StepY) dcGrid.DrawLine(0,y, gridSizeX,y);
-	
-	// Set the bitmap as the window's background.
+	// Paint a grid on it and set it as window's background.
+	DrawGrid(dcGrid, grid0Color, wxSize(grid0StepX,grid0StepY), wxSize(gridSizeX,gridSizeY) );
+	DrawGrid(dcGrid, grid1Color, wxSize(grid1StepX,grid1StepY), wxSize(gridSizeX,gridSizeY) );
+	DrawGrid(dcGrid, grid2Color, wxSize(grid2StepX,grid2StepY), wxSize(gridSizeX,gridSizeY) );
 	circuitView->SetBackgroundBitmap(bmpGrid);
+	
 	
 	// Set the scrolling parameters.
 	circuitView->SetVirtualSize(400,400);  // The size of its "virtual" (potential, offscreen) area.
