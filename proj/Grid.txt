@@ -1,0 +1,60 @@
+What we need to know to draw a simple grid?
+"""""""""""""""""""""""""""""""""""""""""""
+1.	Line style (color, thickness, pattern). Perhaps `wxPen` could store all these properties for us.
+2.	The coordinates of the first line to draw (because it can be offset).
+3.	The distance to the next line (the step).
+4.	a)	How many such lines to draw,  or...
+	b)	The coordinates of the last line to draw,  or...
+	c)	The maximal coordinates of the visible view.
+
+If in (4) we choose (a), we would have to keep track of TWO separate counters in the drawing loop:
+*	one counting how much lines has been drawn so far (so that we could stop when reaching the required numer),
+*	one storing the coordinates of the current line
+	(if we want to avoid calculating it all the time by multiplying the line number by the distance between the lines;
+	 multiplication is usually slower than simply adding the distance between the lines to the cuurent line coordinates).
+But if we choose (b) or (c) instead, then we would have to keep only ONE counter in the drawing loop: the current line's coordinates.
+We can simply keep adding to it the distance between the lines to get the coordinates of the next line in a row, until we reach the last one.
+
+So we decide to drop the option (a).
+Which of the remaining ones is better now? (b) or (c)?
+
+To know the coordinates of the last line to draw, some calculations are needed:
+First, we need to subtract the first line's coordinates from the view's size to know how much space there is left.
+Next, we need to make an integer division of this remaining size by the distance between the lines to see how many lines will fit in there.
+When we know the number of lines in the view, we can multiply it by the distance between the lines to get the coordinates of the last line.
+
+Phew! Lots of calculations which seems costy! (Especially the division.)
+
+All these calculations can be saved by calculating them on the go, when the loop is running.
+We just need to use option (4.c).
+Then we can keep adding the distance between the lines to the current line's coordinates and see if we still fit inside the view.
+If not, the loop is finished.
+
+This seems to be the best option to go with.
+
+DECISION:
+We use option (4.c) for drawing the grid.
+We start from some initial coordinates for the first line (we can get it from the grid's offset in the view).
+Then we keep adding to it the distance between the lines to get the next line's coordinates.
+If this line is still inside the view, we draw it.
+If not, we finish the loop.
+
+So to draw a simple grid, we need the following information:
+1.	Line style (we can store it all in `wxPen`).
+2.	The distance between the lines (in pixels; in both directions, so we'll use `wxSize` to store it).
+3.	The DC on which the grid will be drawn.
+4.	The current view's size and position (we can use `wxRect` for that).
+5.	The grid's offset in the view (we get the first line's coordinates from it).
+
+NOTE:
+(3) and (4) are common to all object which has to be drawn on the DC of some view.
+We will always need the DC for that, and the rectangle describing the view's visible area we need to update.
+
+
+What we need to know to draw a more complex grid?
+"""""""""""""""""""""""""""""""""""""""""""""""""
+*	The properties of a single grid, taken so many times as many grids we want to overlay.
+	Each could have its own color, line style, and distance between lines.
+*	DC and the visible area's rectangle (as for any visible object).
+
+We won't store the background color, since this will allow for custom backgrounds on which the grid could then be overlaid.
