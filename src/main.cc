@@ -92,7 +92,7 @@ DiodakFrame::DiodakFrame():
 	CircuitView *circuitView = new CircuitView(this);
 	
 	// Set the scrolling parameters.
-	circuitView->SetVirtualSize(400,400);  // The size of its "virtual" (potential, offscreen) area.
+	circuitView->SetVirtualSize(2000,2000);  // The size of its "virtual" (potential, offscreen) area.
 	circuitView->SetScrollRate(10,10);     // Jump by 10 pixels as the "scroll unit" (must be positive to see the scrollbars).
 	
 	// All's ready to roll. Create the status bar.

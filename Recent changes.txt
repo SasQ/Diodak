@@ -1,16 +1,4 @@
-*	Drawing a grid as the window's background.
-*	The `wxCustomBackgroundWindow` idea has been dropped completely.
-	Switched to a custom control derived from `wxScrolledWindow` for drawing the circuit view.
-	It has been put in a separate module `Views/Circuit`, for more clarity, easier maintenance and separate compilation.
-*	The grid drawing code has been moved to that module, too, since it will be mostly used in there.
-	Now it's being called from the circuit view window's Erase event.
-*	The `Makefile` has been updated to account for the new `Views/Circuit` module.
-
-PROBLEMS:
-*	The grid is still painted incorrectly in the damaged regions, because it doesn't seem to account for the scrolled position.
-	Instead, it always draws the grid precisely at the same place in the window's background.
-	Next time we'll try to correct this by calling `DoPrepareDC` on the device context before drawing the bitmap.
+*	The grid is now being drawn correctly all over the document's view.
 
 TODO:
 *	Factor out the grid drawing code some more.
-*	Correct the grid drawing to account for the scrolled view.

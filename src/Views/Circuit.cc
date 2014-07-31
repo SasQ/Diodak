@@ -41,13 +41,16 @@ CircuitView::CircuitView(wxWindow* parent):
 void CircuitView::OnEraseBg(wxEraseEvent& evt)
 {
 	wxDC *dc = evt.GetDC();
+	DoPrepareDC(*dc);        // Map the DC's coordinates to the scrolled coordinates.
+	
+	wxSize viewSize = GetVirtualSize();
 	
 	// Prepare the grid parameters.
-	wxColour grid0Color(251,251,251), grid1Color(247,247,247), grid2Color(242,242,242); // Grid colors: FB, F7, F2.
+	wxColour grid0Color(251,251,251), grid1Color(247,247,247), grid2Color(240,240,240); // Grid colors: FB, F7, F0.
 	unsigned grid0StepX = 10, grid0StepY = grid0StepX;                                  // Grid 0 resolution is 10 pixels.
 	unsigned grid1StepX = 10*grid0StepX, grid1StepY = 10*grid0StepY,                    // Grid 1 is 10 times more sparse.
 	         grid2StepX = 10*grid1StepX, grid2StepY = 10*grid1StepY;                    // Grid 3 is 10 times more still sparse.
-	unsigned gridSizeX = grid2StepX, gridSizeY = grid2StepY;                            // The size of one repetition of the grid.
+	unsigned gridSizeX = viewSize.GetWidth(), gridSizeY = viewSize.GetHeight();         // The size of the virtual view.
 	
 	// Fill the background with white.
 	dc->SetPen(wxNullPen);
