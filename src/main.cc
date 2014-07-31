@@ -9,22 +9,14 @@
 #include <wx/icon.h>
 #include <wx/toolbar.h>
 #include <wx/combobox.h>
-#include <wx/scrolwin.h>
-// FIXME: Uncomment this if you're compiling against wxWidgets < 3.1 (changeset 76947) where this bughas been corrected:
-//#include <wx/wx.h>
-#include <wx/custombgwin.h>
-#include <wx/bitmap.h>
-#include <wx/dcmemory.h>
-#include <wx/brush.h>
-#include <wx/pen.h>
-#include <wx/colour.h>
 #include <wx/msgdlg.h>
 #include <wx/string.h>
 
+// Own headers.
+#include "Views/Circuit.hh"
+
 // Icons (in XPM format).
 #include "assets/icons/NewCircuit.xpm"
-
-typedef wxCustomBackgroundWindow<wxScrolledWindow> CircuitView;
 
 // Strings.
 const std::string
@@ -86,18 +78,6 @@ BEGIN_EVENT_TABLE(DiodakFrame, wxFrame)
 END_EVENT_TABLE()
 
 
-// Low-level grid drawing function.
-void DrawGrid(wxDC& canvas, wxColour color, wxSize gridCellSize, wxSize gridSize)
-{
-	unsigned gridStepX = gridCellSize.GetWidth(), gridStepY = gridCellSize.GetHeight(),
-	         gridSizeX = gridSize.GetWidth(), gridSizeY = gridSize.GetHeight();
-	
-	canvas.SetPen( wxPen(color,1) );
-	for (int x=0; x < gridSizeX; x += gridStepX) canvas.DrawLine(x,0, x,gridSizeY);
-	for (int y=0; y < gridSizeY; y += gridStepY) canvas.DrawLine(0,y, gridSizeX,y);
-}
-
-
 /// The main frame's default constructor.
 DiodakFrame::DiodakFrame():
 	wxFrame(0, wxID_ANY, wxString::FromAscii( appNameVer.c_str() ) )
@@ -108,34 +88,8 @@ DiodakFrame::DiodakFrame():
 	// Initialize menu bars and toolbars.
 	InitMenus();  InitToolbars();
 	
-	// Create a scrolled window for the circuit area, with a custom bitmap as its background.
-	CircuitView *circuitView = new CircuitView;
-	circuitView->Create(this, wxID_ANY, wxDefaultPosition, wxSize(400,400), wxHSCROLL|wxVSCROLL);
-	
-	// --- Prepare the bitmap tile with a grid and set it as the custom background. ---
-	
-	// Prepare the grid parameters.
-	wxColour grid0Color(251,251,251), grid1Color(247,247,247), grid2Color(242,242,242); // Grid colors: FB, F7, F2.
-	unsigned grid0StepX = 10, grid0StepY = grid0StepX;                                  // Grid 0 resolution is 10 pixels.
-	unsigned grid1StepX = 10*grid0StepX, grid1StepY = 10*grid0StepY,                    // Grid 1 is 10 times more sparse.
-	         grid2StepX = 10*grid1StepX, grid2StepY = 10*grid1StepY;                    // Grid 3 is 10 times more still sparse.
-	unsigned gridSizeX = grid2StepX, gridSizeY = grid2StepY;                            // The size of one repetition of the grid.
-	
-	// Create a bitmap for the grid tile, and its corresponding DC.
-	wxBitmap bmpGrid(gridSizeX,gridSizeY);
-	wxMemoryDC dcGrid(bmpGrid);
-	
-	// Fill the background with white.
-	dcGrid.SetPen(wxNullPen);
-	dcGrid.SetBrush(*wxWHITE_BRUSH);
-	dcGrid.DrawRectangle(0,0, gridSizeX,gridSizeY);
-	
-	// Paint a grid on it and set it as window's background.
-	DrawGrid(dcGrid, grid0Color, wxSize(grid0StepX,grid0StepY), wxSize(gridSizeX,gridSizeY) );
-	DrawGrid(dcGrid, grid1Color, wxSize(grid1StepX,grid1StepY), wxSize(gridSizeX,gridSizeY) );
-	DrawGrid(dcGrid, grid2Color, wxSize(grid2StepX,grid2StepY), wxSize(gridSizeX,gridSizeY) );
-	circuitView->SetBackgroundBitmap(bmpGrid);
-	
+	// Create a scrolled window for the circuit area, with a grid in its background.
+	CircuitView *circuitView = new CircuitView(this);
 	
 	// Set the scrolling parameters.
 	circuitView->SetVirtualSize(400,400);  // The size of its "virtual" (potential, offscreen) area.

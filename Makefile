@@ -34,16 +34,22 @@ QUIET_LD=  $(QUIET_TXT) $(COLR_CYA)Linking  $(COLR_RST)
 
 # ----- The actual build recipe -----
 
-$(DIR_BLD)/diodak: $(DIR_OBJ)/main.o
+$(DIR_BLD)/diodak: $(DIR_OBJ)/Views/Circuit.o $(DIR_OBJ)/main.o
 	$(QUIET_LD) $(DIR_BLD)/diodak\n"
 	@mkdir -p $(DIR_BLD)
-	@$(LD) $(DIR_OBJ)/main.o -o $(DIR_BLD)/diodak $(LDOPTS)
+	@$(LD) $(DIR_OBJ)/Views/Circuit.o $(DIR_OBJ)/main.o -o $(DIR_BLD)/diodak $(LDOPTS)
 	@echo -e "\n$(COLR_GRN)*** SUCCESSFULLY BUILT ***$(COLR_RST)\n"
 
-$(DIR_OBJ)/main.o: $(DIR_SRC)/main.cc  $(DIR_RES)/icons/NewCircuit.xpm
+$(DIR_OBJ)/main.o: $(DIR_SRC)/main.cc $(DIR_SRC)/Views/Circuit.hh  $(DIR_RES)/icons/NewCircuit.xpm
 	$(QUIET_CC) $(DIR_SRC)/main.cc\n"
 	@mkdir -p $(DIR_OBJ)
 	@$(CC) -c $(DIR_SRC)/main.cc -o $(DIR_OBJ)/main.o $(CCOPTS)
+
+$(DIR_OBJ)/Views/Circuit.o: $(DIR_SRC)/Views/Circuit.cc $(DIR_SRC)/Views/Circuit.hh
+	$(QUIET_CC) $(DIR_SRC)/Views/Circuit.cc\n"
+	@mkdir -p $(DIR_OBJ)/Views
+	@$(CC) -c $(DIR_SRC)/Views/Circuit.cc -o $(DIR_OBJ)/Views/Circuit.o $(CCOPTS)
+
 
 .PHONY: clean
 clean:
