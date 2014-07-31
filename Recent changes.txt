@@ -1,4 +1,5 @@
-*	The grid is now being drawn correctly all over the document's view.
-
-TODO:
-*	Factor out the grid drawing code some more.
+*	The grid drawing code has been factored out to a separate helper class.
+	The parameters of the grid are now stored within the class, which facilitates passing them around.
+	Now we can have as many grids as we please.
+*	The grids are being prepared in the circuit view's constructor, so we don't need to recreate them from scratch on every drawing.
+	In the Erase event, we can simply draw them.
