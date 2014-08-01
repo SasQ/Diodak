@@ -1,5 +1,7 @@
-*	The grid drawing code has been factored out to a separate helper class.
-	The parameters of the grid are now stored within the class, which facilitates passing them around.
-	Now we can have as many grids as we please.
-*	The grids are being prepared in the circuit view's constructor, so we don't need to recreate them from scratch on every drawing.
-	In the Erase event, we can simply draw them.
+*	Now we can draw the grid with an offset.
+	This will be useful when drawing the grid inside damaged regions only.
+	We can then start from the left-top corner of the visible rectangle,
+	add the offset to get the coordinates of the first line, and start drawing from there.
+
+TODO
+*	Limit drawing the grid to the damaged regions only.

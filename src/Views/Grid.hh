@@ -17,7 +17,7 @@ class Grid
  	wxSize CellSize() const;
  	unsigned CellWidth() const;
  	unsigned CellHeight() const;
- 	void DrawOn(wxDC& dc, const wxRect& clip);
+ 	void DrawOn(wxDC& dc, const wxRect& clip, const wxPoint& offset=wxPoint(0,0) );
  	
  private:
  	wxPen linePen;

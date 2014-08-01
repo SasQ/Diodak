@@ -53,7 +53,9 @@ void CircuitView::OnEraseBg(wxEraseEvent& evt)
 	dc->DrawRectangle(0,0, gridSizeX,gridSizeY);
 	
 	// Paint all three levels of the grid over it.
-	grids[0]->DrawOn(*dc, wxRect(0,0,gridSizeX,gridSizeY) );
-	grids[1]->DrawOn(*dc, wxRect(0,0,gridSizeX,gridSizeY) );
-	grids[2]->DrawOn(*dc, wxRect(0,0,gridSizeX,gridSizeY) );
+	wxRect visible(0,0,gridSizeX,gridSizeY);
+	wxPoint offset(13,30);
+	grids[0]->DrawOn(*dc,visible,offset);
+	grids[1]->DrawOn(*dc,visible,offset);
+	grids[2]->DrawOn(*dc,visible,offset);
 }
