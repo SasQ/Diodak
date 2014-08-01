@@ -1,4 +1,5 @@
 #include "Grid.hh"
+#include <iostream>
 
 /// Constructor.
 Grid::Grid(const wxPen& linePen, const wxSize& cellSize):
@@ -12,15 +13,21 @@ Grid::Grid(const wxColour& lineColor, const wxSize& cellSize):
 
 
 /// Low-level grid drawing function.
-void Grid::DrawOn(wxDC& dc, const wxRect& clip, const wxPoint& offset)
+void Grid::DrawOn(wxDC& dc, const wxRect& clip)
 {
 	unsigned
 	  gridStartX = clip.GetX(), gridStartY = clip.GetY(),
-	  gridFirstX = gridStartX + offset.x % gridStepX,           // Modular division protects the offset from getting larger than
-	  gridFirstY = gridStartY + offset.y % gridStepY,           // the grid cell's width, because this looks ugly (big blanks).
-	  gridEndX = clip.GetRight(), gridEndY = clip.GetBottom();
+	  gridEndX = clip.GetRight()+1, gridEndY = clip.GetBottom()+1,
+	  gridFirstX = gridStartX + (gridStepX - gridStartX % gridStepX) % gridStepX,
+	  gridFirstY = gridStartY + (gridStepY - gridStartY % gridStepY) % gridStepY;
 	
+	std::clog << "\nGrid in (" << gridStartX << ',' << gridStartY << ';' << gridEndX << ',' << gridEndY << ") "
+	             "with first (" << gridFirstX << ',' << gridFirstY << ")\n  ";
 	dc.SetPen(linePen);
-	for (int x = gridFirstX; x < gridEndX; x += gridStepX) dc.DrawLine(x,gridStartY, x,gridEndY);
-	for (int y = gridFirstY; y < gridEndY; y += gridStepY) dc.DrawLine(gridStartX,y, gridEndX,y);
+	for (int x = gridFirstX; x < gridEndX; x += gridStepX) { dc.DrawLine(x,gridStartY, x,gridEndY);
+		std::clog << x << ' '; }
+		std::clog << '\n';
+	for (int y = gridFirstY; y < gridEndY; y += gridStepY) { dc.DrawLine(gridStartX,y, gridEndX,y);
+		std::clog << y << ' '; }
+		std::clog << std::endl;
 }

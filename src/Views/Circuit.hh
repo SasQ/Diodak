@@ -4,6 +4,8 @@
 // wxWidgets library headers.
 #include <wx/scrolwin.h>
 #include <wx/event.h>
+#include <wx/dc.h>
+#include <wx/gdicmn.h>   // wxSize, wxRect, wxPoint
 
 // Our own headers.
 #include "Grid.hh"
@@ -15,6 +17,8 @@ class CircuitView: public wxScrolledWindow
  	CircuitView(wxWindow* parent);
  	virtual ~CircuitView();
  	void OnEraseBg(wxEraseEvent& evt);
+ 	void OnPaint(wxPaintEvent& evt);
+ 	void UpdateRegion(wxDC& dc, const wxRect& region);
  	
  private:
  	Grid *grids[3];  // We will store 3 grids of different levels here.

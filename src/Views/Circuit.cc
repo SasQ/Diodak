@@ -1,7 +1,10 @@
 #include "Circuit.hh"
+#include <iostream>
 
 // wxWidgets library headers.
 #include <wx/dcclient.h>
+#include <wx/gdicmn.h>    // wxSize, wxRect, wxPoint
+#include <wx/region.h>
 #include <wx/colour.h>
 #include <wx/brush.h>
 #include <wx/pen.h>
@@ -10,6 +13,7 @@
 // Circuit view's static event table.
 BEGIN_EVENT_TABLE(CircuitView, wxScrolledWindow)
 	EVT_ERASE_BACKGROUND(CircuitView::OnEraseBg)
+	EVT_PAINT(CircuitView::OnPaint)
 END_EVENT_TABLE()
 
 
@@ -18,7 +22,8 @@ CircuitView::CircuitView(wxWindow* parent):
 	wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(200,100), wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
 {
 	// Prepare the grids. 
-	wxColour grid0Color(251,251,251), grid1Color(246,246,246), grid2Color(238,238,238); // Grid colors: FB, F6, EE.
+	//wxColour grid0Color(251,251,251), grid1Color(246,246,246), grid2Color(238,238,238); // Grid colors: FB, F6, EE.
+	wxColour grid0Color(0,0,0), grid1Color(255,0,0), grid2Color(0,255,255);
 	unsigned grid0StepX = 10, grid0StepY = grid0StepX;                                  // Grid 0 resolution is 10 pixels.
 	unsigned grid1StepX = 10*grid0StepX, grid1StepY = 10*grid0StepY,                    // Grid 1 is 10 times more sparse.
 	         grid2StepX = 10*grid1StepX, grid2StepY = 10*grid1StepY;                    // Grid 3 is 10 times more still sparse.
@@ -40,22 +45,40 @@ CircuitView::~CircuitView()
 /// Erase the window's background.
 void CircuitView::OnEraseBg(wxEraseEvent& evt)
 {
-	wxDC *dc = evt.GetDC();
-	DoPrepareDC(*dc);        // Map the DC's coordinates to the scrolled coordinates.
+	// Do nothing. The background is being updated along with everything else in the Paint event.
+}
+
+/// Update the window's client area.
+void CircuitView::OnPaint(wxPaintEvent& evt)
+{
+	wxPaintDC dc(this);
+	DoPrepareDC(dc);     // Remap the DC's coordinates to the virtual view's coordinates.
 	
-	// Get the dimensions of the virtual view.
-	wxSize viewSize = GetVirtualSize();
-	unsigned gridSizeX = viewSize.GetWidth(), gridSizeY = viewSize.GetHeight();
+	// Update all damaged regions, one at a time.
+	wxRegionIterator regions( GetUpdateRegion() );
+	while (regions) {
+		wxRect region( regions.GetRect() );
+		wxPoint from( CalcUnscrolledPosition( region.GetTopLeft()     ) ),
+		        to(   CalcUnscrolledPosition( region.GetBottomRight() ) );
+		UpdateRegion(dc, wxRect(from,to) );
+		++regions;
+	}
+}
+
+void CircuitView::UpdateRegion(wxDC& dc, const wxRect& region)
+{
+	std::clog << "\nUpdate region (" << region.GetX() << ',' << region.GetY() << ';' << region.GetRight() << ',' << region.GetBottom() << ")"
+	          << std::flush;
 	
-	// Fill the background with white.
-	dc->SetPen(wxNullPen);
-	dc->SetBrush(*wxWHITE_BRUSH);
-	dc->DrawRectangle(0,0, gridSizeX,gridSizeY);
+	// Fill the background with a random color.
+	dc.SetPen(wxNullPen);
+	static char red = 0;
+	dc.SetBrush( wxColour(red,200,200) ); red += 15;
+	//dc.SetBrush(*wxWHITE_BRUSH);
+	dc.DrawRectangle(region);
 	
 	// Paint all three levels of the grid over it.
-	wxRect visible(0,0,gridSizeX,gridSizeY);
-	wxPoint offset(13,30);
-	grids[0]->DrawOn(*dc,visible,offset);
-	grids[1]->DrawOn(*dc,visible,offset);
-	grids[2]->DrawOn(*dc,visible,offset);
+	grids[0]->DrawOn(dc,region);
+	grids[1]->DrawOn(dc,region);
+	grids[2]->DrawOn(dc,region);
 }
