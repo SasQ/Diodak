@@ -2,9 +2,13 @@
 CC=g++
 LD=g++
 
-# Options.
-CCOPTS=`wx-config --cxxflags`
-LDOPTS=`wx-config --libs` -O2 -s
+# Definitions.
+BUILD_DATE=`date +%F`
+BUILD_DATE_STR=\"$(BUILD_DATE)\"
+
+# Build options.
+CCOPTS=`wx-config --cxxflags` -DBUILD_DATE_STR="$(BUILD_DATE_STR)"
+LDOPTS=`wx-config --libs` -O2
 
 # Directories.
 DIR_SRC=./src
@@ -30,7 +34,6 @@ QUIET_TXT=@echo -n -e "
 QUIET_MSG=$(QUIET_TXT)$(COLR_WHT)
 QUIET_CC=  $(QUIET_TXT) $(COLR_BLU)Compiling$(COLR_RST)
 QUIET_LD=  $(QUIET_TXT) $(COLR_CYA)Linking  $(COLR_RST)
-
 
 # ----- The actual build recipe -----
 

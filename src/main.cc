@@ -5,6 +5,7 @@
 // wxWidgets library headers.
 #include <wx/app.h>
 #include <wx/frame.h>
+#include <wx/gdicmn.h>     // wxSize
 #include <wx/menu.h>
 #include <wx/icon.h>
 #include <wx/toolbar.h>
@@ -22,7 +23,7 @@
 const std::string
 	appName         = "Diodak",
 	appVersion      = "0.1",
-	appBuildDate    = "2014.07.19",
+	appBuildDate    = BUILD_DATE_STR,
 	appAuthor       = "Mike 'SasQ' Studencki",
 	appAuthorEmail  = "sasq1@go2.pl",
 	appNameVer      = appName + ' ' + appVersion,
@@ -80,7 +81,7 @@ END_EVENT_TABLE()
 
 /// The main frame's default constructor.
 DiodakFrame::DiodakFrame():
-	wxFrame(0, wxID_ANY, wxString::FromAscii( appNameVer.c_str() ) )
+	wxFrame(0, wxID_ANY, wxString::FromAscii( appNameVer.c_str() ), wxDefaultPosition, wxSize(640,480) )
 {
 	// Set the main window's icon.
 	SetIcon( wxIcon(NewCircuit_xpm) );
@@ -93,7 +94,8 @@ DiodakFrame::DiodakFrame():
 	
 	// Set the scrolling parameters.
 	circuitView->SetVirtualSize(2000,2000);  // The size of its "virtual" (potential, offscreen) area.
-	circuitView->SetScrollRate(10,10);     // Jump by 10 pixels as the "scroll unit" (must be positive to see the scrollbars).
+	circuitView->SetScrollRate(10,10);       // Jump by 10 pixels as the "scroll unit" (must be positive to see the scrollbars).
+	circuitView->Scroll(70,80);              // Initial scroll position of 70,80 scroll units (900,800 pixels).
 	
 	// All's ready to roll. Create the status bar.
 	CreateStatusBar();  SetStatusText( wxT("Command, my Master!") );

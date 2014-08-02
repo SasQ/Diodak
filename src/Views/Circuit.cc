@@ -22,8 +22,7 @@ CircuitView::CircuitView(wxWindow* parent):
 	wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(200,100), wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
 {
 	// Prepare the grids. 
-	//wxColour grid0Color(251,251,251), grid1Color(246,246,246), grid2Color(238,238,238); // Grid colors: FB, F6, EE.
-	wxColour grid0Color(0,0,0), grid1Color(255,0,0), grid2Color(0,255,255);
+	wxColour grid0Color(251,251,251), grid1Color(246,246,246), grid2Color(238,238,238); // Grid colors: FB, F6, EE.
 	unsigned grid0StepX = 10, grid0StepY = grid0StepX;                                  // Grid 0 resolution is 10 pixels.
 	unsigned grid1StepX = 10*grid0StepX, grid1StepY = 10*grid0StepY,                    // Grid 1 is 10 times more sparse.
 	         grid2StepX = 10*grid1StepX, grid2StepY = 10*grid1StepY;                    // Grid 3 is 10 times more still sparse.
@@ -67,14 +66,9 @@ void CircuitView::OnPaint(wxPaintEvent& evt)
 
 void CircuitView::UpdateRegion(wxDC& dc, const wxRect& region)
 {
-	std::clog << "\nUpdate region (" << region.GetX() << ',' << region.GetY() << ';' << region.GetRight() << ',' << region.GetBottom() << ")"
-	          << std::flush;
-	
-	// Fill the background with a random color.
+	// Fill the background with white.
+	dc.SetBrush(*wxWHITE_BRUSH);
 	dc.SetPen(wxNullPen);
-	static char red = 0;
-	dc.SetBrush( wxColour(red,200,200) ); red += 15;
-	//dc.SetBrush(*wxWHITE_BRUSH);
 	dc.DrawRectangle(region);
 	
 	// Paint all three levels of the grid over it.

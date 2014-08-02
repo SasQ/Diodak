@@ -1,33 +1,30 @@
 #include "Grid.hh"
-#include <iostream>
 
 /// Constructor.
 Grid::Grid(const wxPen& linePen, const wxSize& cellSize):
-	linePen(linePen), gridStepX( cellSize.GetWidth() ), gridStepY( cellSize.GetHeight() )
+	linePen(linePen), stepX( cellSize.GetWidth() ), stepY( cellSize.GetHeight() )
 { }
 
 /// Another constructor. Defaults the pen stroke width to 1.
 Grid::Grid(const wxColour& lineColor, const wxSize& cellSize):
-	linePen( wxPen(lineColor,1) ), gridStepX( cellSize.GetWidth() ), gridStepY( cellSize.GetHeight() )
+	linePen( wxPen(lineColor,1) ), stepX( cellSize.GetWidth() ), stepY( cellSize.GetHeight() )
 { }
 
 
 /// Low-level grid drawing function.
 void Grid::DrawOn(wxDC& dc, const wxRect& clip)
 {
-	unsigned
-	  gridStartX = clip.GetX(), gridStartY = clip.GetY(),
-	  gridEndX = clip.GetRight()+1, gridEndY = clip.GetBottom()+1,
-	  gridFirstX = gridStartX + (gridStepX - gridStartX % gridStepX) % gridStepX,
-	  gridFirstY = gridStartY + (gridStepY - gridStartY % gridStepY) % gridStepY;
+	// http://docs.wxwidgets.org/trunk/classwx_d_c.html#a12f2c236d4d320acec0bc6fe20e8399d
+	// "Note that the point (x2, y2) is not part of the line and is not drawn by this function
+	//  (this is consistent with the behaviour of many other toolkits)."
 	
-	std::clog << "\nGrid in (" << gridStartX << ',' << gridStartY << ';' << gridEndX << ',' << gridEndY << ") "
-	             "with first (" << gridFirstX << ',' << gridFirstY << ")\n  ";
+	const unsigned
+		startX = clip.GetX(), startY = clip.GetY(),
+		endX = clip.GetRight(), endY = clip.GetBottom(),
+		firstX = startX + (stepX - startX % stepX) % stepX,  // FIXME: Try reducing these equations some more.
+		firstY = startY + (stepY - startY % stepY) % stepY;
+	
 	dc.SetPen(linePen);
-	for (int x = gridFirstX; x < gridEndX; x += gridStepX) { dc.DrawLine(x,gridStartY, x,gridEndY);
-		std::clog << x << ' '; }
-		std::clog << '\n';
-	for (int y = gridFirstY; y < gridEndY; y += gridStepY) { dc.DrawLine(gridStartX,y, gridEndX,y);
-		std::clog << y << ' '; }
-		std::clog << std::endl;
+	for (int x = firstX; x <= endX; x += stepX)  dc.DrawLine(x,startY, x,endY+1);
+	for (int y = firstY; y <= endY; y += stepY)  dc.DrawLine(startX,y, endX+1,y);
 }

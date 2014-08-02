@@ -21,13 +21,13 @@ class Grid
  	
  private:
  	wxPen linePen;
- 	unsigned gridStepX, gridStepY;
+ 	unsigned stepX, stepY;
 };
 
 /// ----- Header-level implementation -----
 
-inline wxSize   Grid::CellSize() const     { return wxSize(gridStepX,gridStepY); }
-inline unsigned Grid::CellWidth() const    { return gridStepX; }
-inline unsigned Grid::CellHeight() const   { return gridStepY; }
+inline wxSize   Grid::CellSize() const     { return wxSize(stepX,stepY); }
+inline unsigned Grid::CellWidth() const    { return stepX; }
+inline unsigned Grid::CellHeight() const   { return stepY; }
 
 #endif

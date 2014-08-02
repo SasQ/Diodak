@@ -1,8 +1,4 @@
-*	Drawing the grid has been moved to the Paint event where all the drawing will be handled.
-*	Drawing has been restricted to the damaged regions only.
-*	Grid colors has been changed to something more visible temporarily, to see if everything works fine.
-*	For debugging purposes, the background colors change circularly.
-*	We also log the coordinates on the console for debug purposes until everything will work correctly.
-
-TODO
-*	Simplify the calculation of the first grid line coordinates.
+*	Corrected a bug in the grid drawing code which caused the grid lines to be always one pixel too short.
+*	Cleaned up the grid drawing code by using shorter and more comprehensive names for the variables.
+*	Removed the superfluous debugging code and reset the grid lines to their proper colors.
+*	Added automatic build versioning into the `Makefile` and `main.cc`.
