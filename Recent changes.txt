@@ -1,11 +1,24 @@
 *	Subgoal: Parts list with icons and labels.
 *	We use `wxListCtrl` for the parts list.
-*	For now we simply add some items to the list with the simplest metod there is: parametrized `InsertItem` method.
-	There is no image list attached yet, so there are no icons, just simple text labels.
+*	Attached an image list to get a nice-looking icons. The images are stored in `src/assets/Parts/Gates`.
 
 PROBLEMS:
+*	Unfortunately, the icons aren't very nice-looking :-P
+	1.	There's a wide gap between the icon and its caption. This might confuse the user that the caption rather belongs to the next icon.
+		Seems as if the height of the area reserved for the icon is taken to be the same as the image's width.
+		But still the image is aligned to top instead to bottom, which makes this wide gap.
+	2.	All images in the `wxImageList` have to be of the same size.
+		If some image has a different size, wxWidgets shows an ugly message box with an error from somewhere inside the library.
+	3.	The list is being aligned in columns first, instead of in rows first.
+	4.	When there's not enough room vertically, it wraps to the next column.
+		But when there's not enough room horizontally, it shows a scrollbar.
+		I'd rather like it the other way around:
+		Order the icons in rows, wrap these rows when there's not enough room horizontally, and show the vertical scrollbar when out of vertical space.
+	5.	An ugly dotted rectangle is shown around the label of the item which has been selected last time even if no item is selected.
+	6.	Selected icon doesn't change; only the caption's background color.
+		It would look better if it outlined or changed the background color of both the icon and its caption when selected.
+	Seems like we need some custom drawing for this control, or to use a completely different control.
 *	After adding the image list, from some unknown reasons two clicks are needed to change the tab in the tabbed notebook. This needs fixin'.
 
 TODO:
-*	Add icon images using `wxImageList`.
 *	Correct the "two clicks to switch a tab" bug, if possible.

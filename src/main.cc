@@ -13,6 +13,7 @@
 #include <wx/splitter.h>
 #include <wx/notebook.h>
 #include <wx/listctrl.h>
+#include <wx/imaglist.h>
 #include <wx/panel.h>
 #include <wx/msgdlg.h>
 #include <wx/string.h>
@@ -102,8 +103,16 @@ DiodakFrame::DiodakFrame():
 	wxNotebook* sidebar = new wxNotebook(vSplit1, wxID_ANY);
 	
 	// Create a list view and add it as the first page of the tabbed notebook.
-	wxListCtrl *parts = new wxListCtrl(sidebar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ICON);
+	wxListCtrl *parts = new wxListCtrl(sidebar, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+		wxLC_ICON|wxLC_SINGLE_SEL);
 	sidebar->AddPage(parts, wxT("Parts") );
+	
+	// Create an image list and load some images into it. Then attach it to the list control.
+	wxImageList *partsIcons = new wxImageList;
+	partsIcons->Add( wxBitmap("src/assets/Parts/Gates/AND.png") );
+	partsIcons->Add( wxBitmap("src/assets/Parts/Gates/OR.png") );
+	partsIcons->Add( wxBitmap("src/assets/Parts/Gates/NOT.png") );
+	parts->SetImageList(partsIcons,wxIMAGE_LIST_NORMAL);
 	
 	// Add some items to the list view. The parameters are: ID, text label, icon index in the associated image list.
 	parts->InsertItem(0, wxT("AND gate"), 0);
