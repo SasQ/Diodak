@@ -1,13 +1,16 @@
 *	Our next goal is to create the layout for the main window (frame).
-*	Switching to a fluid layout employing Sizers.
-*	We use a `wxBoxSizer` to lay out child windows in a horizontal row, all stretched to always fit the entire client area.
-	We set the sidebar's proportion to 0, which means that it won't use any excess horizontal space (that is, won't stretch beyond its usual size).
-	Circuit view, on the other hand, has the proportion set to 1, which means that it will use the entire excess horizontal space and stretch to fit it.
-	Both child windows will stretch vertically to fit the client area of the parent window.
-*	Then we call `SetSizerAndFit` to tell the frame to use our sizer for layout and update it when resizing,
-	and that it should never be resizd to be smaller than the minimal sizes of all its children taken together
-	(that is, its client area should always fit to the sizer, so it won't resize any smaller if the sizer is already at its minimal size).
+*	Switching to splitters.
+*	This time we use a `wxSplitterWindow` to lay out child windows in a horizontal row, all stretched to always fit the entire client area.
+	The splitter is a lone child window, so it is stretched to cover the entire client area of the frame.
+	But it manages two child windows in a horizontal split view, with the vertical sash between them being able to move left or right.
+	It then automatically resizes its child windows.
+*	We set the minimal size of the pane to 100 pixels to prevent the sidebar from being too small.
+	Unfortunately, this also disallows removing the sidebar entirely by double-clicking on the splitter's sash.
+*	Double-clicking to remove one of the panes wouldn't work properly anyway, because it removes its right child window by default.
+	We would rather like the left child (the sidebar) to hide.
+	Unfortunately there's no obvious way to set up which one of the child windows should disappear when double-clicking the sash.
+	We would have to override its `OnUnsplit` or `OnDoubleClickSash` member functions to handle it manually to just hide the sidebar.
+	We will try it next time.
 
-PROBLEMS:
-*	Unfortunately, this won't allow the user to resize the sidebar when needed.
-	We'll try a better approach with a sizing splitter next time.
+TODO:
+*	Allow for hiding the sidebar by double-clicking the vertical splitter's sash.

@@ -10,7 +10,7 @@
 #include <wx/icon.h>
 #include <wx/toolbar.h>
 #include <wx/combobox.h>
-#include <wx/sizer.h>
+#include <wx/splitter.h>
 #include <wx/panel.h>
 #include <wx/msgdlg.h>
 #include <wx/string.h>
@@ -93,20 +93,21 @@ DiodakFrame::DiodakFrame():
 	
 	// --- Prepare the main window's layout ---
 	
-	wxSizer *mainLayout = new wxBoxSizer(wxHORIZONTAL);
+	// Create a splitted view which will divide the client area into a side panel and main area.
+	wxSplitterWindow *vSplit1 = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_LIVE_UPDATE);
 	
 	// Create a sidebar (just a simple panel for now).
-	wxPanel *sidebar = new wxPanel(this, wxID_ANY, wxPoint(0,0), wxSize(100,400), wxRAISED_BORDER);
-	mainLayout->Add(sidebar, 0, wxEXPAND);      // Proportion=0 means: the sidebar won't be stretched horizontally at all.
+	wxPanel *sidebar = new wxPanel(vSplit1, wxID_ANY, wxPoint(0,0), wxSize(100,400) );
 	
 	// Create a scrolled window for the circuit area.
-	CircuitView *circuitView = new CircuitView(this, wxID_ANY, wxPoint(100,0), wxSize(400,300), wxSUNKEN_BORDER);
+	CircuitView *circuitView = new CircuitView(vSplit1, wxID_ANY, wxPoint(100,0), wxSize(400,300), wxSUNKEN_BORDER);
 	circuitView->SetVirtualSize(2000,2000);     // The size of its "virtual" (potential, offscreen) area.
 	circuitView->SetScrollRate(10,10);          // Jump by 10 pixels as the "scroll unit" (must be positive to see the scrollbars).
 	circuitView->Scroll(70,80);                 // Initial scroll position of 70,80 scroll units (900,800 pixels).
-	mainLayout->Add(circuitView, 1, wxEXPAND);  // Proportion=1 means: use the entire excess horizontal space for the circuit view.
 	
-	SetSizerAndFit(mainLayout);   // Use the sizer for layout. Prevent the frame from being resized to smaller sizes.
+	// Split the view using two windows for left and right children of the splitter window.
+	vSplit1->SplitVertically(sidebar,circuitView,150);
+	vSplit1->SetMinimumPaneSize(100);           // This will prevent from automatic removal, too.
 	
 	// All's ready to roll. Create the status bar.
 	CreateStatusBar();  SetStatusText( wxT("Command, my Master!") );
