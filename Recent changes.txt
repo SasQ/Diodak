@@ -1,13 +1,13 @@
 *	Our next goal is to create the layout for the main window (frame).
-*	We add a simple sidebar (just a `wxPanel` for now) on the left of the circuit view.
-*	Added further standard parameters to the `CircuitView`'s constructor to be able to set this window's position and size.
+*	Switching to a fluid layout employing Sizers.
+*	We use a `wxBoxSizer` to lay out child windows in a horizontal row, all stretched to always fit the entire client area.
+	We set the sidebar's proportion to 0, which means that it won't use any excess horizontal space (that is, won't stretch beyond its usual size).
+	Circuit view, on the other hand, has the proportion set to 1, which means that it will use the entire excess horizontal space and stretch to fit it.
+	Both child windows will stretch vertically to fit the client area of the parent window.
+*	Then we call `SetSizerAndFit` to tell the frame to use our sizer for layout and update it when resizing,
+	and that it should never be resizd to be smaller than the minimal sizes of all its children taken together
+	(that is, its client area should always fit to the sizer, so it won't resize any smaller if the sizer is already at its minimal size).
 
 PROBLEMS:
-*	When there's only one single child window in the frame, its size and position are ignored.
-	The window is being stretched to fit the entire client area of the frame and resizes with it.
-	But when there's more child windows than one (as in our case), their sizes and positions are not managed any longer.
-	Their size and position are being taken from their constructors and they are static.
-	We want a fluid layout, so we need to use some better method for managing these child windows.
-
-TODO:
-*	Find a better way to manage child windows' sizes and positions automatically.
+*	Unfortunately, this won't allow the user to resize the sidebar when needed.
+	We'll try a better approach with a sizing splitter next time.
