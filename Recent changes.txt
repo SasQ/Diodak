@@ -1,16 +1,11 @@
-*	Our next goal is to create the layout for the main window (frame).
-*	Switching to splitters.
-*	This time we use a `wxSplitterWindow` to lay out child windows in a horizontal row, all stretched to always fit the entire client area.
-	The splitter is a lone child window, so it is stretched to cover the entire client area of the frame.
-	But it manages two child windows in a horizontal split view, with the vertical sash between them being able to move left or right.
-	It then automatically resizes its child windows.
-*	We set the minimal size of the pane to 100 pixels to prevent the sidebar from being too small.
-	Unfortunately, this also disallows removing the sidebar entirely by double-clicking on the splitter's sash.
-*	Double-clicking to remove one of the panes wouldn't work properly anyway, because it removes its right child window by default.
-	We would rather like the left child (the sidebar) to hide.
-	Unfortunately there's no obvious way to set up which one of the child windows should disappear when double-clicking the sash.
-	We would have to override its `OnUnsplit` or `OnDoubleClickSash` member functions to handle it manually to just hide the sidebar.
-	We will try it next time.
+*	Our next goal is to create the basic layout for the main window (frame).
+*	Switched to splitters.
+*	Added a tabbed notebook in the sidebar (just for testing).
+*	Corrected one minor bug in `Circuit.hh` to make it backward-compatible with wxWidgets 2.8.
+
+PROBLEMS:
+*	When the sidebar contains a tabbed notebook, the mouse cursor doesn't change when hovering over the splitter's sash.
+*	There's some ugly oogaboogah with the grid when compiling against wxWidgets 2.8. It needs fixing.
 
 TODO:
 *	Allow for hiding the sidebar by double-clicking the vertical splitter's sash.

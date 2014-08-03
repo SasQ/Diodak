@@ -11,6 +11,7 @@
 #include <wx/toolbar.h>
 #include <wx/combobox.h>
 #include <wx/splitter.h>
+#include <wx/notebook.h>
 #include <wx/panel.h>
 #include <wx/msgdlg.h>
 #include <wx/string.h>
@@ -96,8 +97,12 @@ DiodakFrame::DiodakFrame():
 	// Create a splitted view which will divide the client area into a side panel and main area.
 	wxSplitterWindow *vSplit1 = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_LIVE_UPDATE);
 	
-	// Create a sidebar (just a simple panel for now).
-	wxPanel *sidebar = new wxPanel(vSplit1, wxID_ANY, wxPoint(0,0), wxSize(100,400) );
+	// Create a sidebar. This time it will be a tabbed notebook.
+	wxNotebook* sidebar = new wxNotebook(vSplit1, wxID_ANY);
+	
+	// Create two simple panels and add them as the first and second page of the tabbed notebook.
+	wxPanel *panel1 = new wxPanel(sidebar);  sidebar->AddPage(panel1, wxT("Parts") );
+	wxPanel *panel2 = new wxPanel(sidebar);  sidebar->AddPage(panel2, wxT("Simulation") );
 	
 	// Create a scrolled window for the circuit area.
 	CircuitView *circuitView = new CircuitView(vSplit1, wxID_ANY, wxPoint(100,0), wxSize(400,300), wxSUNKEN_BORDER);
@@ -106,8 +111,8 @@ DiodakFrame::DiodakFrame():
 	circuitView->Scroll(70,80);                 // Initial scroll position of 70,80 scroll units (900,800 pixels).
 	
 	// Split the view using two windows for left and right children of the splitter window.
-	vSplit1->SplitVertically(sidebar,circuitView,150);
-	vSplit1->SetMinimumPaneSize(100);           // This will prevent from automatic removal, too.
+	vSplit1->SplitVertically(sidebar,circuitView,200);
+	vSplit1->SetMinimumPaneSize(150);           // This will prevent from automatic removal, too.
 	
 	// All's ready to roll. Create the status bar.
 	CreateStatusBar();  SetStatusText( wxT("Command, my Master!") );
