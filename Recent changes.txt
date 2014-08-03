@@ -1,4 +1,13 @@
-*	Corrected a bug in the grid drawing code which caused the grid lines to be always one pixel too short.
-*	Cleaned up the grid drawing code by using shorter and more comprehensive names for the variables.
-*	Removed the superfluous debugging code and reset the grid lines to their proper colors.
-*	Added automatic build versioning into the `Makefile` and `main.cc`.
+*	Our next goal is to create the layout for the main window (frame).
+*	We add a simple sidebar (just a `wxPanel` for now) on the left of the circuit view.
+*	Added further standard parameters to the `CircuitView`'s constructor to be able to set this window's position and size.
+
+PROBLEMS:
+*	When there's only one single child window in the frame, its size and position are ignored.
+	The window is being stretched to fit the entire client area of the frame and resizes with it.
+	But when there's more child windows than one (as in our case), their sizes and positions are not managed any longer.
+	Their size and position are being taken from their constructors and they are static.
+	We want a fluid layout, so we need to use some better method for managing these child windows.
+
+TODO:
+*	Find a better way to manage child windows' sizes and positions automatically.

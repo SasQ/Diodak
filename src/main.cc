@@ -89,10 +89,13 @@ DiodakFrame::DiodakFrame():
 	// Initialize menu bars and toolbars.
 	InitMenus();  InitToolbars();
 	
-	// Create a scrolled window for the circuit area, with a grid in its background.
-	CircuitView *circuitView = new CircuitView(this);
+	// --- Prepare the main window's layout ---
 	
-	// Set the scrolling parameters.
+	// Create a sidebar (just a simple panel for now).
+	wxPanel *sidebar = new wxPanel(this, wxID_ANY, wxPoint(0,0), wxSize(100,400) );
+	
+	// Create a scrolled window for the circuit area.
+	CircuitView *circuitView = new CircuitView(this, wxID_ANY, wxPoint(100,0), wxSize(400,300), wxSUNKEN_BORDER);
 	circuitView->SetVirtualSize(2000,2000);  // The size of its "virtual" (potential, offscreen) area.
 	circuitView->SetScrollRate(10,10);       // Jump by 10 pixels as the "scroll unit" (must be positive to see the scrollbars).
 	circuitView->Scroll(70,80);              // Initial scroll position of 70,80 scroll units (900,800 pixels).

@@ -18,8 +18,8 @@ END_EVENT_TABLE()
 
 
 /// Constructor.
-CircuitView::CircuitView(wxWindow* parent):
-	wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxSize(200,100), wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
+CircuitView::CircuitView(wxWindow* parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style, const wxString &name):
+	wxScrolledWindow(parent,id,pos,size,style,name)
 {
 	// Prepare the grids. 
 	wxColour grid0Color(251,251,251), grid1Color(246,246,246), grid2Color(238,238,238); // Grid colors: FB, F6, EE.

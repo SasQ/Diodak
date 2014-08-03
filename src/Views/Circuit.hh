@@ -14,7 +14,7 @@
 class CircuitView: public wxScrolledWindow
 {
  public:
- 	CircuitView(wxWindow* parent);
+ 	CircuitView(wxWindow* parent, wxWindowID id=-1, const wxPoint &pos=wxDefaultPosition, const wxSize &size=wxDefaultSize, long style=wxHSCROLL|wxVSCROLL, const wxString &name="scrolledWindow");
  	virtual ~CircuitView();
  	void OnEraseBg(wxEraseEvent& evt);
  	void OnPaint(wxPaintEvent& evt);
