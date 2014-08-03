@@ -12,6 +12,7 @@
 #include <wx/combobox.h>
 #include <wx/splitter.h>
 #include <wx/notebook.h>
+#include <wx/listctrl.h>
 #include <wx/panel.h>
 #include <wx/msgdlg.h>
 #include <wx/string.h>
@@ -100,9 +101,17 @@ DiodakFrame::DiodakFrame():
 	// Create a sidebar. This time it will be a tabbed notebook.
 	wxNotebook* sidebar = new wxNotebook(vSplit1, wxID_ANY);
 	
-	// Create two simple panels and add them as the first and second page of the tabbed notebook.
-	wxPanel *panel1 = new wxPanel(sidebar);  sidebar->AddPage(panel1, wxT("Parts") );
-	wxPanel *panel2 = new wxPanel(sidebar);  sidebar->AddPage(panel2, wxT("Simulation") );
+	// Create a list view and add it as the first page of the tabbed notebook.
+	wxListCtrl *parts = new wxListCtrl(sidebar, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ICON);
+	sidebar->AddPage(parts, wxT("Parts") );
+	
+	// Add some items to the list view. The parameters are: ID, text label, icon index in the associated image list.
+	parts->InsertItem(0, wxT("AND gate"), 0);
+	parts->InsertItem(1, wxT("OR gate"),  1);
+	parts->InsertItem(2, wxT("NOT gate"), 2);
+	
+	// Create a simple panel and add it as the second page of the tabbed notebook.
+	wxPanel *panel = new wxPanel(sidebar);  sidebar->AddPage(panel, wxT("Simulation") );
 	
 	// Create a scrolled window for the circuit area.
 	CircuitView *circuitView = new CircuitView(vSplit1, wxID_ANY, wxPoint(100,0), wxSize(400,300), wxSUNKEN_BORDER);

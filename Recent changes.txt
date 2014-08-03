@@ -1,11 +1,11 @@
-*	Our next goal is to create the basic layout for the main window (frame).
-*	Switched to splitters.
-*	Added a tabbed notebook in the sidebar (just for testing).
-*	Corrected one minor bug in `Circuit.hh` to make it backward-compatible with wxWidgets 2.8.
+*	Subgoal: Parts list with icons and labels.
+*	We use `wxListCtrl` for the parts list.
+*	For now we simply add some items to the list with the simplest metod there is: parametrized `InsertItem` method.
+	There is no image list attached yet, so there are no icons, just simple text labels.
 
 PROBLEMS:
-*	When the sidebar contains a tabbed notebook, the mouse cursor doesn't change when hovering over the splitter's sash.
-*	There's some ugly oogaboogah with the grid when compiling against wxWidgets 2.8. It needs fixing.
+*	After adding the image list, from some unknown reasons two clicks are needed to change the tab in the tabbed notebook. This needs fixin'.
 
 TODO:
-*	Allow for hiding the sidebar by double-clicking the vertical splitter's sash.
+*	Add icon images using `wxImageList`.
+*	Correct the "two clicks to switch a tab" bug, if possible.
